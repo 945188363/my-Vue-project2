@@ -98,6 +98,7 @@ export default {
       } else {
         this.elkVisualAble = 'display:none'
         this.CancelELKUrl()
+        this.$message.success('保存成功！')
       }
     },
     async SavePrometheus () {
@@ -130,8 +131,8 @@ export default {
           if (item['MonitorStatus'] === 1) {
             this.elkMonitor = true
             this.elkVisualAble = 'display:block'
-            this.ELKUrl = item['MonitorConfig']
           }
+          this.ELKUrl = item['MonitorConfig']
         }
         if (item['MonitorType'] === 'Prometheus') {
           if (item['MonitorStatus'] === 1) {

@@ -144,6 +144,7 @@ export default {
         this.globalVisualAble = 'display:block'
       } else {
         this.globalVisualAble = 'display:none'
+        this.SaveIpRestrictionSettings('global')
       }
     },
     showInterfaceSettings () {
@@ -151,6 +152,7 @@ export default {
         this.interfaceVisualAble = 'display:block'
       } else {
         this.interfaceVisualAble = 'display:none'
+        this.SaveIpRestrictionSettings('interface')
       }
     },
     async SaveIpRestrictionSettings (type) {
