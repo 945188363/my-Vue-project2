@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="outSide">
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
@@ -7,23 +7,23 @@
         <el-breadcrumb-item>服务注册方式</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div  style="margin-top: 25px;margin-bottom: 20px">
-      <div class="groupToolBar"
-           style="margin-top: 5px;margin-bottom: 20px; justify-content: space-between; display: flex;"
-      >
+    <div class="inSide">
+      <div class="groupToolBar">
         <el-button type="primary" icon="el-icon-plus" size="small" @click="showCreateRegistryDialog">新建服务注册方式</el-button>
         <div>
           <el-input
             placeholder="请输入服务注册方式名称，支持模糊搜索"
             v-model="searchRegistry"
-            clearable style="width: 300px;">
+            @clear="QueryRegistry"
+            clearable
+            style="width: 300px;">
           </el-input>
-          <el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" size="small" @click="SearchRegistryByName">搜索</el-button>
         </div>
       </div>
       <el-table
         :data="RegistrysData"
-        height="610"
+        height="100%"
         border
         stripe
         style="width: 100%">
@@ -172,6 +172,14 @@ export default {
     showCreateRegistryDialog () {
       this.createRegistryDialogFormVisible = true
     },
+    async SearchRegistryByName () {
+      const regParam = {
+        'Name': this.searchRegistry
+      }
+      const response = await this.$http.post('/queryRegistryByName', regParam)
+      console.log(response)
+      this.RegistrysData = response.data['data']
+    },
     async CreateRegistry () {
       this.createRegistryDialogFormVisible = false
       const response = await this.$http.post('/createRegistry', this.registryCreateForm)
@@ -214,5 +222,18 @@ export default {
 </script>
 
 <style scoped>
-
+  .outSide{
+    height: 85%;
+  }
+  .inSide{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    height: 100%;
+  }
+  .groupToolBar{
+    margin-top: 5px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    display: flex;
+  }
 </style>

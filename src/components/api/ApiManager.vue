@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-scrollbar>
+  <div class="outSide">
+    <el-scrollbar class="outSide">
       <div style="height: 620px;">
         <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -8,12 +8,12 @@
             <el-breadcrumb-item>API管理</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div style="margin-top: 30px;" >
+        <div class="inSide" >
           <el-tabs v-model="apiManagerActiveName" type="card">
             <el-tab-pane label="api创建" name="first">
               <!--卡片视图-->
               <el-card class="box-card">
-                <div>
+                <div class="inSide">
                   <!--api组-->
                   <div style="margin-top: 20px;">
                     <p class="lh_15"><span >api组&nbsp;:&nbsp;</span><br></p>
@@ -139,65 +139,72 @@
               </el-card>
             </el-tab-pane>
             <el-tab-pane label="api组管理" name="second">
-              <div class="groupToolBar"
-                   style="margin-top: 5px;margin-bottom: 20px; justify-content: space-between; display: flex;"
-              >
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="showCreateApiGroupDetailDialog">新建</el-button>
-                <div>
-                  <el-input
-                    placeholder="请输入组名，支持模糊搜索"
-                    v-model="searchGroup"
-                    clearable style="width: 300px;">
-                  </el-input>
-                  <el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+              <div class="inSide">
+                <div class="groupToolBar">
+                  <el-button type="primary" icon="el-icon-plus" size="small" @click="showCreateApiGroupDetailDialog">新建</el-button>
+                  <div>
+                    <el-input
+                      placeholder="请输入组名，支持模糊搜索"
+                      v-model="searchGroup"
+                      clearable
+                      @clear="QueryApiGroupList"
+                      style="width: 300px;">
+                    </el-input>
+                    <el-button type="primary" icon="el-icon-search" size="small" @click="SearchByGroupName">搜索</el-button>
+                  </div>
                 </div>
+                <el-table
+                  :data="ApiGroupsDetailsData"
+                  height="610"
+                  border
+                  stripe
+                  style="width: 100%">
+                  <el-table-column
+                    prop="ApiGroupName"
+                    label="组名称"
+                    width="300">
+                  </el-table-column>
+                  <el-table-column
+                    prop="Description"
+                    label="组描述"
+                    width="560">
+                  </el-table-column>
+                  <el-table-column
+                    prop="operation"
+                    label="操作">
+                    <template slot-scope="scope">
+                      <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                        <el-button @click="showEditApiGroupDetailDialog(scope.row)" type="primary"  icon="el-icon-edit" circle></el-button>
+                      </el-tooltip>
+                      <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                        <el-popconfirm
+                          title="该操作会删除组内所有api，确认删除吗？"
+                          @onConfirm="DeleteApiGroupDetail(scope.row)"
+                        >
+                          <el-button type="danger" slot="reference" icon="el-icon-delete" circle></el-button>
+                        </el-popconfirm>
+                      </el-tooltip>
+                    </template>
+                  </el-table-column>
+                </el-table>
               </div>
-              <el-table
-                :data="ApiGroupsDetailsData"
-                height="610"
-                border
-                stripe
-                style="width: 100%">
-                <el-table-column
-                  prop="ApiGroupName"
-                  label="组名称"
-                  width="300">
-                </el-table-column>
-                <el-table-column
-                  prop="Description"
-                  label="组描述"
-                  width="560">
-                </el-table-column>
-                <el-table-column
-                  prop="operation"
-                  label="操作">
-                  <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                      <el-button @click="showEditApiGroupDetailDialog(scope.row)" type="primary"  icon="el-icon-edit" circle></el-button>
-                    </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                      <el-popconfirm
-                        title="该操作会删除组内所有api，确认删除吗？"
-                        @onConfirm="DeleteApiGroupDetail(scope.row)"
-                      >
-                        <el-button type="danger" slot="reference" icon="el-icon-delete" circle></el-button>
-                      </el-popconfirm>
-                    </el-tooltip>
-                  </template>
-                </el-table-column>
-              </el-table>
             </el-tab-pane>
             <el-tab-pane label="api详情列表" name="third">
-              <div class="apiToolBar"
-                   style="margin-top: 5px;margin-bottom: 20px; justify-content: space-between; display: flex;"
-              >
+              <div class="groupToolBar">
                 <div>
                   <el-input
                     placeholder="请输入api名称，支持模糊搜索"
-                    v-model="searchGroup"
-                    clearable style="width: 300px;">
+                    v-model="searchApiName"
+                    clearable
+                    @clear="SearchByApiNameAndGroupName"
+                    style="width: 300px;">
                   </el-input>
-                  <el-select style="width: 150px;" clearable v-model="ApiGroup" placeholder="请选择">
+                  <el-select
+                    style="width: 150px;"
+                    clearable
+                    @clear="SearchByApiNameAndGroupName"
+                    v-model="searchApiGroupName"
+                    placeholder="请选择">
                     <el-option
                       v-for="item in ApiGroupsDetailsData"
                       :key="item.ApiGroupName"
@@ -205,7 +212,7 @@
                       :value="item.ApiGroupName">
                     </el-option>
                   </el-select>
-                  <el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+                  <el-button type="primary" icon="el-icon-search" size="small" @click="SearchByApiNameAndGroupName">搜索</el-button>
                 </div>
               </div>
               <el-table
@@ -258,7 +265,6 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -449,7 +455,9 @@ export default {
       ApiRetry: 3,
       ApiReturnContent: '',
       formLabelWidth: '120px',
+      searchApiGroupName: '',
       searchGroup: '',
+      searchApiName: '',
       apiManagerActiveName: 'first'
     }
   },
@@ -465,6 +473,29 @@ export default {
     showEditApiDetailDialog (row) {
       this.editApiDetailDialogFormVisible = true
       this.ApiDetailsEditForm = row
+    },
+    // 根据apiName 和 groupName查找api
+    async SearchByApiNameAndGroupName () {
+      const apiParam = {
+        'ApiGroup': this.searchApiGroupName,
+        'ApiName': this.searchApiName
+      }
+      console.log(apiParam)
+      // 上传表单
+      const response = await this.$http.post('/queryApiListByApiNameAndGroupName', apiParam)
+      console.log(response)
+      this.ApiDetailsData = response.data['data']
+    },
+    // 根据groupName查找group
+    async SearchByGroupName () {
+      const groupParam = {
+        'ApiGroupName': this.searchGroup
+      }
+      console.log(groupParam)
+      // 上传表单
+      const response = await this.$http.post('/queryApiGroupListByGroupName', groupParam)
+      console.log(response)
+      this.ApiGroupsDetailsData = response.data['data']
     },
     // 创建ApiGroup详情，提交表单
     async CreateApiGroupDetail () {
@@ -564,5 +595,19 @@ export default {
   }
   .box-card{
     background-color: honeydew;
+  }
+  .outSide{
+    height: 100%;
+  }
+  .inSide{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    height: 100%;
+  }
+  .groupToolBar{
+    margin-top: 5px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    display: flex;
   }
 </style>

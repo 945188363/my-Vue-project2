@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="outSide">
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
@@ -7,23 +7,23 @@
         <el-breadcrumb-item>负载均衡</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div  style="margin-top: 25px;margin-bottom: 20px">
-      <div class="groupToolBar"
-           style="margin-top: 5px;margin-bottom: 20px; justify-content: space-between; display: flex;"
-      >
+    <div class="inSide">
+      <div class="groupToolBar">
         <el-button type="primary" icon="el-icon-plus" size="small" @click="showCreateLoadBalanceDialog">新建负载方式</el-button>
         <div>
           <el-input
             placeholder="请输入负载方式名称，支持模糊搜索"
             v-model="searchLoadBalance"
-            clearable style="width: 300px;">
+            clearable
+            @clear="QueryLoadBalance"
+            style="width: 300px;">
           </el-input>
-          <el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+          <el-button type="primary" icon="el-icon-search" size="small" @click="SearchLoadBalanceByName">搜索</el-button>
         </div>
       </div>
       <el-table
         :data="LoadBalancesData"
-        height="610"
+        height="100%"
         border
         stripe
         style="width: 100%">
@@ -211,6 +211,14 @@ export default {
     showCreateLoadBalanceDialog () {
       this.createLoadBalanceDialogFormVisible = true
     },
+    async SearchLoadBalanceByName () {
+      const lbParam = {
+        'Name': this.searchLoadBalance
+      }
+      const response = await this.$http.post('/queryLoadBalanceByName', lbParam)
+      console.log(response)
+      this.LoadBalancesData = response.data['data']
+    },
     async CreateLoadBalance () {
       this.createLoadBalanceDialogFormVisible = false
       const response = await this.$http.post('/createLoadBalance', this.loadBalanceCreateForm)
@@ -252,5 +260,18 @@ export default {
 </script>
 
 <style scoped>
-
+  .outSide{
+    height: 85%;
+  }
+  .inSide{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    height: 100%;
+  }
+  .groupToolBar{
+    margin-top: 5px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    display: flex;
+  }
 </style>

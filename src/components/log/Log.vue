@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-scrollbar>
+  <div class="outSide">
+    <el-scrollbar class="outSide">
       <div style="height: 620px;">
         <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -9,12 +9,12 @@
             <el-breadcrumb-item>日志设置</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div style="margin-top: 30px;" >
+        <div class="inSide" >
           <el-tabs v-model="LogActiveName" type="card">
             <el-tab-pane label="请求日志" name="first">
               <!--卡片视图-->
               <el-card class="box-card">
-                <div>
+                <div class="inSide">
                   <!--日志名称-->
                   <div style="margin-top: 20px;">
                     <p class="lh_15"><span >请求日志名称&nbsp;:&nbsp;</span><br></p>
@@ -165,8 +165,10 @@
           </el-tabs>
         </div>
       </div>
+
     </el-scrollbar>
   </div>
+
 </template>
 
 <script>
@@ -442,5 +444,13 @@ export default {
   }
   .box-card{
     background-color: honeydew;
+  }
+  .outSide{
+    height: 100%;
+  }
+  .inSide{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    height: 100%;
   }
 </style>

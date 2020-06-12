@@ -1,40 +1,42 @@
 <template>
-  <el-scrollbar>
-    <div style="height: 600px;">
-      <div class="layer">
-        <div class="line">
-          <!--一周访问统计-->
-          <h4>一周访问统计</h4>
-          <button @click="changeType">切换图表类型</button>
-          <ve-chart :data="chartData"
-                    :settings="chartSettings"
-                    :loading="loading"
-                    :data-empty="dataEmpty">
-          </ve-chart>
+  <div class="outSide">
+    <el-scrollbar class="outSide">
+      <div class="inSide">
+        <div class="layer">
+          <div class="line">
+            <!--一周访问统计-->
+            <h4>一周访问统计</h4>
+            <button @click="changeType">切换图表类型</button>
+            <ve-chart :data="chartData"
+                      :settings="chartSettings"
+                      :loading="loading"
+                      :data-empty="dataEmpty">
+            </ve-chart>
+          </div>
+          <div class="line">
+            <h4>一周API访问前五名</h4>
+            <ve-ring :data="ringData"></ve-ring>
+          </div>
         </div>
-        <div class="line">
-          <h4>一周API访问前五名</h4>
-          <ve-ring :data="ringData"></ve-ring>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="line">
-          <!--服务器性能指标-->
-          <h4>服务器性能指标</h4>
-          <ve-gauge :data="gaugeData"
-                    :settings="gaugeSettings"
-                    :loading="loading">
-          </ve-gauge>
-        </div>
-        <div class="line">
-          <!--整体数据展示-->
-          <h4>整体数据展示</h4>
-          <ve-funnel :data="funnelData"></ve-funnel>
+        <div class="layer">
+          <div class="line">
+            <!--服务器性能指标-->
+            <h4>服务器性能指标</h4>
+            <ve-gauge :data="gaugeData"
+                      :settings="gaugeSettings"
+                      :loading="loading">
+            </ve-gauge>
+          </div>
+          <div class="line">
+            <!--整体数据展示-->
+            <h4>整体数据展示</h4>
+            <ve-funnel :data="funnelData"></ve-funnel>
 
+          </div>
         </div>
       </div>
-    </div>
-  </el-scrollbar>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>
@@ -180,14 +182,23 @@ export default {
 <style scoped>
   .line{
     width: 500px;
-    height: 400px;
+    height: 100%;
     margin-top: 5px;
     margin-bottom: 20px;
   }
   .layer{
+    height: 100%;
     margin-top: 5px;
     margin-bottom: 20px;
     justify-content: space-around;
     display: flex;
+  }
+  .outSide{
+    height: 90%;
+  }
+  .inSide{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    height: 100%;
   }
 </style>
