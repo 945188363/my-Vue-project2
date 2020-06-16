@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import DataDisplay from '@/components/dataDisplay/DataDisplay'
 import Upload from '@/components/Upload'
 import Index from '@/components/Index'
 import ApiManager from '@/components/api/ApiManager'
@@ -36,7 +36,7 @@ export default new Router({
       children: [
         {
           path: '/welcome',
-          component: HelloWorld
+          component: DataDisplay
         },
         {
           path: '/apiManager',

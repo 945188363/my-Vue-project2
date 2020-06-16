@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'DataDisplay',
   data () {
     this.typeArr = ['line', 'histogram', 'pie']
     this.index = 0
@@ -74,12 +74,7 @@ export default {
       },
       funnelData: {
         columns: ['状态', '数值'],
-        rows: [
-          { '状态': '展示', '数值': 900 },
-          { '状态': '访问', '数值': 600 },
-          { '状态': '点击', '数值': 300 },
-          { '状态': '订单', '数值': 100 }
-        ]
+        rows: []
       },
       ringData: {
         columns: ['API名称', '访问次数'],
@@ -154,6 +149,15 @@ export default {
           index++
         })
       }
+      // 一周数据总览
+      this.funnelData.rows.push(
+        {
+          '状态': 'API访问数量', '数值': response.data['data'].length
+        },
+        {
+          '状态': 'API种类数量', '数值': countData.size
+        }
+      )
       this.loading = false
     },
     parseDate (date) {
@@ -166,6 +170,11 @@ export default {
       let cpuPercent = response.data['data'].toFixed(2) / 100
       this.gaugeData.rows.push(
         { type: '占比', value: cpuPercent }
+      )
+      this.funnelData.rows.push(
+        {
+          '状态': 'CPU利用率', '数值': cpuPercent
+        }
       )
     }
   },
